@@ -1,6 +1,7 @@
 package com.example.project.dao.impl;
 
 import com.example.project.dao.UserDao;
+import com.example.project.entity.Match;
 import com.example.project.entity.RoleType;
 import com.example.project.entity.User;
 import com.example.project.exception.DaoException;
@@ -16,7 +17,10 @@ public class UserDaoImpl implements UserDao {
     private static final String PASSWORD = "root";
     private static final String FIND_ALL_USERS = "SELECT * FROM project.users";
     private static final String FIND_USER_BY_LOGIN_AND_PASSWORD = "SELECT * FROM project.users WHERE login = ? AND password = ?";
-    private static final String CREATE_NEW_USER = "INSERT INTO `project.users` (`login`, `password`, `role`, `surname`, `name`, `age`, `phone`, `mail`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String CREATE_NEW_USER = "INSERT INTO `users` (`login`, `password`, `role`, `surname`, `name`, `age`, `phone`, `mail`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String FIND_MAIL_AND_LOGIN = "SELECT * FROM project.users WHERE mail = ? AND login = ?";
+    private static final String CREATE_NEW_MATCH = "INSERT INTO project.sports (`name`, `player1`, `player2`, `rate1`, `rate0`, `rate2`, `date`) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
 
     @Override
     public List<User> findAllUser() throws DaoException {
@@ -110,7 +114,6 @@ public class UserDaoImpl implements UserDao {
         boolean isAdd;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         try {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
@@ -133,7 +136,6 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException(e);
         } finally {
             try { //только connection или все ?
-                resultSet.close();
                 preparedStatement.close();
                 connection.close();
             } catch (SQLException e) {
@@ -142,4 +144,77 @@ public class UserDaoImpl implements UserDao {
         }
         return isAdd;
     }
+
+    @Override
+    public boolean isExistMailAndLogin(String mail, String login) throws DaoException {
+        boolean isExist = false;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            preparedStatement = connection.prepareStatement(FIND_MAIL_AND_LOGIN);
+            preparedStatement.setString(1, mail);
+            preparedStatement.setString(2, login);
+
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                isExist = true;
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            try {
+                resultSet.close();
+                preparedStatement.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isExist;
+    }
+
+
+    @Override
+    public boolean createMatch(Match match) throws DaoException {
+        boolean isAdd;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            preparedStatement = connection.prepareStatement(CREATE_NEW_MATCH);
+            preparedStatement.setString(1, match.getName());
+            preparedStatement.setString(2, match.getPlayer1());
+            preparedStatement.setString(3, match.getPlayer2());
+            preparedStatement.setDouble(4, match.getRate1());
+            preparedStatement.setDouble(5, match.getRate0());
+            preparedStatement.setDouble(6, match.getRate2());
+            preparedStatement.setDate(7, Date.valueOf(match.getDate()));
+
+           isAdd = preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            try {
+                preparedStatement.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isAdd;
+    }
 }
+
+

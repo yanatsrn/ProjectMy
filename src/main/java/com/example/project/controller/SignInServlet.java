@@ -21,19 +21,17 @@ public class SignInServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("pages/signUp.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("pages/signIn.jsp");
         requestDispatcher.forward(request, response);
-    }// todo may be removed
-
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
-        boolean validLogin = UserValidator.isValidLogin(login);
-        boolean validPassword = UserValidator.isValidPassword(password);
+        boolean validSignIn = UserValidator.isValidSignIn(login, password);
         boolean dataCorrect = true;
-        if (!validLogin || !validPassword) {
+        if (!validSignIn) {
             // todo вернуься на странцу signIn и вывести ошибки
             dataCorrect = false;
         }
@@ -41,7 +39,7 @@ public class SignInServlet extends HttpServlet {
             try {
                 Optional<User> userOptional = userService.findUserByLoginAngPassword(login, password);
                 if (userOptional.isPresent()) {
-                    response.sendRedirect("pages/main.jsp");
+                    response.sendRedirect("pages/main.jsp"); // todo
                 } else {
                     //todo вернуься на странцу signIn и вывести ошибки пользователя нет
                 }
@@ -49,7 +47,6 @@ public class SignInServlet extends HttpServlet {
             } catch (ServiceException e) {
                 //todo 505
             }
-
         }
     }
 }

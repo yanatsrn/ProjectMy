@@ -5,7 +5,7 @@
     <title>JSP - Hello World</title>
 </head>
 <body>
-<%--<jsp:forward page="pages/main.jsp"></jsp:forward>--%>
-<jsp:forward page="pages/singIn.jsp"></jsp:forward>
+<%--<jsp:forward page="pages/signIn.jsp"></jsp:forward>--%>
+<jsp:forward page="pages/menuAdmin.jsp"></jsp:forward>
 </body>
 </html>

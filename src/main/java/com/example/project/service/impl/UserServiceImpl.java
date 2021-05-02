@@ -2,6 +2,7 @@ package com.example.project.service.impl;
 
 import com.example.project.dao.UserDao;
 import com.example.project.dao.impl.UserDaoImpl;
+import com.example.project.entity.Match;
 import com.example.project.entity.User;
 import com.example.project.exception.DaoException;
 import com.example.project.exception.ServiceException;
@@ -12,6 +13,17 @@ import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
     private UserDao userDao = new UserDaoImpl();
+
+    @Override
+    public boolean createMatch(Match match) throws ServiceException {
+        boolean isAdd;
+        try {
+            isAdd=userDao.createMatch(match);
+        } catch(DaoException e) {
+            throw new ServiceException(e);
+        }
+        return isAdd;
+    }
 
     @Override
     public List<User> findAllUser() throws ServiceException {
@@ -44,5 +56,16 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(e);
         }
         return isAdd;
+    }
+
+    @Override
+    public boolean isExistMailAndLogin(String mail, String login) throws ServiceException {
+        boolean isExist;
+        try {
+            isExist = userDao.isExistMailAndLogin(mail, login);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return isExist;
     }
 }

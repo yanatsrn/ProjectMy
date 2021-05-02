@@ -1,16 +1,29 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Lenovo
-  Date: 28.03.2021
-  Time: 16:11
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html >
 <head>
-    <title>Title</title>
+    <meta charset="UTF-8">
+    <title>Sign up form</title>
+    <link rel="stylesheet" href="css/styleSignInAndSignUp.css">
 </head>
 <body>
-<h1>Sign Up</h1>
+<h1>Регистрация</h1>
+<div id="wrapper">
+<%--    todo pattern required--%>
+    <form id="signin" action="${pageContext.request.contextPath}/sign_up" method="post" autocomplete="off">
+        <input type="text" id="login" name="login" placeholder="Логин" />
+        <input type="password" id="pass" name="password" placeholder="Пароль" />
+        <input type="password" id="repeat_password" name="repeat_password" placeholder="Повторите пароль" />
+        <input type="text" id="name" name="name" placeholder="Имя" />
+        <input type="text" id="surname" name="surname" placeholder="Фамилия" />
+        <input type="text" id="age" name="age" placeholder="Возраст" />
+        <input type="text" id="phone" name="phone" placeholder="Мобильный телефон" />
+        <input type="text" id="mail" name="mail" placeholder="Электронная почта" />
+        <button type="submit">&#xf0da;</button>
+        <p>Авторизация<a href="${pageContext.request.contextPath}/sign_in"> нажмите сюда</a></p>
+    </form>
+</div>
 </body>
 </html>
+
