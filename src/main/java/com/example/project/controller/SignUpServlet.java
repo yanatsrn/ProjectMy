@@ -36,7 +36,7 @@ public class SignUpServlet extends HttpServlet {
         String phone = request.getParameter("phone");
         String mail = request.getParameter("mail");
         boolean dataCorrect = true;
-        try { // todo front
+        try {
             if (!UserValidator.isValidLogin(login)) {
                 request.setAttribute("errorLogin", "Проверьте корректность логина");
                 dataCorrect = false;

@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -29,24 +30,29 @@ public class SignInServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
-        boolean validSignIn = UserValidator.isValidSignIn(login, password);
+        HttpSession session = request.getSession();
         boolean dataCorrect = true;
-        if (!validSignIn) {
-            // todo вернуься на странцу signIn и вывести ошибки
+        if (!UserValidator.isValidSignIn(login, password)) {
+            request.setAttribute("errorSignInLoginAndPassword", "Неверный логин или пароль!");
             dataCorrect = false;
         }
         if (dataCorrect) {
             try {
                 Optional<User> userOptional = userService.findUserByLoginAngPassword(login, password);
                 if (userOptional.isPresent()) {
-                    response.sendRedirect("pages/main.jsp"); // todo
+                    session.setAttribute("user", userOptional);
+                    response.sendRedirect("pages/main.jsp"); // todo show all matches
                 } else {
-                    //todo вернуься на странцу signIn и вывести ошибки пользователя нет
+                    request.setAttribute("errorSignInUserNotFound", "Такого пользователя не существует!");
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("pages/signIn.jsp");
+                    requestDispatcher.forward(request, response);
                 }
-
             } catch (ServiceException e) {
-                //todo 505
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
+        } else {
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("pages/signIn.jsp");
+            requestDispatcher.forward(request, response);
         }
     }
 }

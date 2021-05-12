@@ -97,10 +97,16 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
-            try { //только connection или все ?
-                resultSet.close();
-                preparedStatement.close();
-                connection.close();
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace(); // todo
             }

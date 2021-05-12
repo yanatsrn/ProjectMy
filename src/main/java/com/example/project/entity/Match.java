@@ -1,7 +1,6 @@
 package com.example.project.entity;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Objects;
 
 public class Match {

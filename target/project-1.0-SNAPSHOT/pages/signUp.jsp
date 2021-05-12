@@ -22,6 +22,27 @@
         <input type="text" id="mail" name="mail" placeholder="Электронная почта" />
         <button type="submit">&#xf0da;</button>
         <p>Авторизация<a href="${pageContext.request.contextPath}/sign_in"> нажмите сюда</a></p>
+        <div class="alert alert-danger" role="alert">
+            <h2>${errorLogin}</h2>
+        </div>
+        <div class="alert alert-danger" role="alert">
+            <h2>${errorPassword}</h2>
+        </div>
+        <div class="alert alert-danger" role="alert">
+            <h2>${errorInitials}</h2>
+        </div>
+        <div class="alert alert-danger" role="alert">
+            <h2>${errorAge}</h2>
+        </div>
+        <div class="alert alert-danger" role="alert">
+            <h2>${errorPhone}</h2>
+        </div>
+        <div class="alert alert-danger" role="alert">
+            <h2>${errorMail}</h2>
+        </div>
+        <div class="alert alert-danger" role="alert">
+            <h2>${errorExist}</h2>
+        </div>
     </form>
 </div>
 </body>

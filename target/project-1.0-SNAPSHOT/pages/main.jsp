@@ -6,15 +6,9 @@
     <title>Title</title>
 </head>
 <body>
-<form action="${pageContext.request.contextPath}/show_all_users" method="get">
+<form action="${pageContext.request.contextPath}/" method="get">
     <input type="submit" value="Show all users">
 </form>
-<c:forEach items="${users}" var="user">
-    <h1>${user.getId()}</h1>
-    <h1>${user.getLogin()}</h1>
-    <h1>${user.getPassword()}</h1>
-    <h1>${user.getRoleType()}</h1>
-<%--    todo добавить поля с инфой--%>
-</c:forEach>
+
 </body>
 </html>

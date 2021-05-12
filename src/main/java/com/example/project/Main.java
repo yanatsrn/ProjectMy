@@ -22,9 +22,8 @@ public class Main {
 
 
     public static void main(String[] args) throws DaoException, ParseException {
-        System.out.println(UserValidator.isValidPlayers("z", "0"));
-        System.out.println(UserValidator.isValidPlayers("Манчестер Юнайтед", "Manchester"));
-        System.out.println(UserValidator.isValidPlayers("Манчестер-Юнайтед", "Manchesterjb"));
+        UserDao userDao = new UserDaoImpl();
+
 
     }
 }
