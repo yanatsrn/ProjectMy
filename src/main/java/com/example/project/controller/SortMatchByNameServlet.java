@@ -16,14 +16,13 @@ import java.io.IOException;
 import java.util.List;
 
 
-@WebServlet(value = "/show_all_matches")
-public class MainServlet extends HttpServlet {
+@WebServlet(value = "/sort_match_by_name")
+public class SortMatchByNameServlet extends HttpServlet {
     private UserService userService = new UserServiceImpl();
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<Match> matches = userService.showAllMatches();
+            List<Match> matches = userService.sortMatchByName();
             request.setAttribute("matches", matches);
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("pages/main.jsp");
             requestDispatcher.forward(request, response);

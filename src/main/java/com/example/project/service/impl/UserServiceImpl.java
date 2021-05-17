@@ -68,4 +68,71 @@ public class UserServiceImpl implements UserService {
         }
         return isExist;
     }
+
+
+    @Override
+    public List<Match> showAllMatches() throws ServiceException {
+        List <Match> matches;
+        try {
+            matches = userDao.showAllMatches();
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return matches;
+    }
+
+    @Override
+    public boolean deleteMatch(Long id) throws ServiceException {
+        boolean isDeleted;
+        try {
+            isDeleted=userDao.deleteMatch(id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return isDeleted;
+    }
+
+    @Override
+    public Optional<Match> searchMatchById(Long id) throws ServiceException {
+        Optional<Match> optionalMatch;
+        try {
+            optionalMatch = userDao.searchMatchById(id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return optionalMatch;
+    }
+
+    @Override
+    public List<Match> searchMatchByName(String name) throws ServiceException {
+        List<Match> matches;
+        try {
+            matches = userDao.searchMatchByName(name);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return matches;
+    }
+
+    @Override
+    public List<Match> sortMatchByName() throws ServiceException {
+        List <Match> matches;
+        try {
+            matches = userDao.sortMatchByName();
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return matches;
+    }
+
+    @Override
+    public List<Match> sortMatchByDate() throws ServiceException {
+        List <Match> matches;
+        try {
+            matches = userDao.sortMatchByDate();
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return matches;
+    }
 }

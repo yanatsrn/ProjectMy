@@ -13,4 +13,10 @@ public interface UserDao {
     Optional<User> findUserByLoginAndPassword(String login, String password) throws DaoException;
     boolean createUser(User user) throws DaoException;
     boolean isExistMailAndLogin(String mail, String login) throws DaoException;
+    List<Match> showAllMatches() throws DaoException;
+    boolean deleteMatch(Long id) throws DaoException;
+    Optional<Match> searchMatchById(Long id) throws DaoException;
+    List<Match> searchMatchByName(String name) throws DaoException;
+    List<Match> sortMatchByName() throws DaoException;
+    List<Match> sortMatchByDate() throws DaoException;
 }

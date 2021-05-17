@@ -40,7 +40,7 @@ public class SignInServlet extends HttpServlet {
             try {
                 Optional<User> userOptional = userService.findUserByLoginAngPassword(login, password);
                 if (userOptional.isPresent()) {
-                    session.setAttribute("user", userOptional);
+                    session.setAttribute("user", userOptional.get());
                     response.sendRedirect("pages/main.jsp"); // todo show all matches
                 } else {
                     request.setAttribute("errorSignInUserNotFound", "Такого пользователя не существует!");
@@ -49,7 +49,7 @@ public class SignInServlet extends HttpServlet {
                 }
             } catch (ServiceException e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            }
+            } 
         } else {
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("pages/signIn.jsp");
             requestDispatcher.forward(request, response);

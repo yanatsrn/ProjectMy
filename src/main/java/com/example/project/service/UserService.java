@@ -14,4 +14,10 @@ public interface UserService {
     Optional<User> findUserByLoginAngPassword(String login, String password) throws ServiceException;
     boolean createUser(User user) throws ServiceException;
     boolean isExistMailAndLogin(String mail, String login) throws ServiceException;
+    List<Match> showAllMatches() throws ServiceException;
+    boolean deleteMatch(Long id) throws ServiceException;
+    Optional<Match> searchMatchById(Long id) throws ServiceException;
+    List<Match> searchMatchByName(String name) throws ServiceException;
+    List<Match> sortMatchByName() throws ServiceException;
+    List<Match> sortMatchByDate() throws ServiceException;
 }
