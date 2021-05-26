@@ -1,8 +1,10 @@
 package com.example.project.dao;
 
 import com.example.project.entity.Match;
+import com.example.project.entity.Player;
 import com.example.project.entity.User;
 import com.example.project.exception.DaoException;
+import com.example.project.exception.ServiceException;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,4 +21,7 @@ public interface UserDao {
     List<Match> searchMatchByName(String name) throws DaoException;
     List<Match> sortMatchByName() throws DaoException;
     List<Match> sortMatchByDate() throws DaoException;
+    boolean updateMatch(Match match) throws DaoException;
+    List<Player> method(String player) throws DaoException;
+    boolean makeABet(User user) throws DaoException;
 }

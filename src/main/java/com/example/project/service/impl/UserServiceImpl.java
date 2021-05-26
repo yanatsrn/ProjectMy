@@ -3,11 +3,18 @@ package com.example.project.service.impl;
 import com.example.project.dao.UserDao;
 import com.example.project.dao.impl.UserDaoImpl;
 import com.example.project.entity.Match;
+import com.example.project.entity.Player;
 import com.example.project.entity.User;
 import com.example.project.exception.DaoException;
 import com.example.project.exception.ServiceException;
 import com.example.project.service.UserService;
+import com.example.project.util.Report;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -105,7 +112,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Match> searchMatchByName(String name) throws ServiceException {
-        List<Match> matches;
+        List <Match> matches;
         try {
             matches = userDao.searchMatchByName(name);
         } catch (DaoException e) {
@@ -134,5 +141,50 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(e);
         }
         return matches;
+    }
+
+    @Override
+    public boolean updateMatch(Match match) throws ServiceException {
+        boolean isUpdate;
+        try {
+            isUpdate = userDao.updateMatch(match);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return isUpdate;
+    }
+
+    @Override
+    public double method(String player) throws ServiceException {
+        List<Player> players;
+        double result = 0;
+        try {
+           players = userDao.method(player);
+           if (players.size() != 0) {
+               int won=0;
+               double playersSize = (double) players.size();
+               for (int j = 0; j <players.size(); j++) {
+                   if (players.get(j).getResultOfMatch().equals("Выиграл")) {
+                       won++;
+                   }
+               }
+               double averageEfficiency = (double) won / playersSize;
+               result = ((1.0 / (playersSize - 1.0)) * averageEfficiency) * 100;
+           }
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean makeABet(User user) throws ServiceException {
+        boolean isSucceed;
+        try {
+            isSucceed = userDao.makeABet(user);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return isSucceed;
     }
 }

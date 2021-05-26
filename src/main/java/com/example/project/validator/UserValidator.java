@@ -140,6 +140,14 @@ public class UserValidator {
         return isValid;
     }
 
+    public static boolean isValidSum(String sum) {
+        boolean isValid = true;
+        if (sum == null || sum.isEmpty() || RATE_PATTERN.matcher(sum).matches()) {
+            isValid = false;
+        }
+        return isValid;
+    }
+
     public static boolean isValidDate(String date) {
         boolean isValid = true;
         if (date == null || date.isEmpty() || !DATE_PATTERN.matcher(date).matches()) {

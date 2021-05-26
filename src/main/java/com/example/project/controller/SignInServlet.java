@@ -41,7 +41,7 @@ public class SignInServlet extends HttpServlet {
                 Optional<User> userOptional = userService.findUserByLoginAngPassword(login, password);
                 if (userOptional.isPresent()) {
                     session.setAttribute("user", userOptional.get());
-                    response.sendRedirect("pages/main.jsp"); // todo show all matches
+                    response.sendRedirect("pages/main.jsp");
                 } else {
                     request.setAttribute("errorSignInUserNotFound", "Такого пользователя не существует!");
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher("pages/signIn.jsp");

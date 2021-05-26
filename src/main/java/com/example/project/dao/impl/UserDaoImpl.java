@@ -2,6 +2,7 @@ package com.example.project.dao.impl;
 
 import com.example.project.dao.UserDao;
 import com.example.project.entity.Match;
+import com.example.project.entity.Player;
 import com.example.project.entity.RoleType;
 import com.example.project.entity.User;
 import com.example.project.exception.DaoException;
@@ -10,7 +11,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.time.LocalDate;
 
 public class UserDaoImpl implements UserDao {
     private static final String URL = "jdbc:mysql://localhost/project?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
@@ -23,10 +23,13 @@ public class UserDaoImpl implements UserDao {
     private static final String CREATE_NEW_MATCH = "INSERT INTO project.sports (`name`, `player1`, `player2`, `rate1`, `rate0`, `rate2`, `date`) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String SHOW_ALL_MATCHES = "SELECT * FROM project.sports";
     private static final String DELETE_MATCH = "DELETE FROM project.sports WHERE `sport_id` = ?";
+    private static final String UPDATE_MATCH = "UPDATE project.sports SET `name` = ?, `player1` = ?, `player2` = ?, `rate1` = ?, `rate0` = ?, `rate2` = ?, `date` = ? WHERE sport_id = ?";
     private static final String SEARCH_MATCH_BY_ID = "SELECT * FROM project.sports WHERE `sport_id`=?";
     private static final String SEARCH_MATCH_BY_NAME = "SELECT * FROM project.sports WHERE `name` = ?";
     private static final String SORT_MATCH_BY_NAME = "SELECT * FROM project.sports ORDER BY `name`";
     private static final String SORT_MATCH_BY_DATE = "SELECT * FROM project.sports ORDER BY `date`";
+    private static final String SEARCH_PLAYER_BY_NAME = "SELECT * FROM project.statistics WHERE `player` = ?";
+    private static final String MAKE_A_BET = "UPDATE project.users SET `sum` = ?, `match_id` = ? WHERE user_id = ?";
 
     @Override
     public List<User> findAllUser() throws DaoException {
@@ -54,6 +57,8 @@ public class UserDaoImpl implements UserDao {
                 user.setAge(resultSet.getInt(7));
                 user.setPhone(resultSet.getString(8));
                 user.setMail(resultSet.getString(9));
+                user.setSum(resultSet.getDouble(10));
+                user.setMatchId(resultSet.getInt(11));
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -67,7 +72,7 @@ public class UserDaoImpl implements UserDao {
                 if (connection != null)
                     connection.close();
             } catch (SQLException e) {
-                e.printStackTrace(); // todo
+                e.printStackTrace();
             }
         }
         return users;
@@ -101,6 +106,8 @@ public class UserDaoImpl implements UserDao {
                 user.setAge(resultSet.getInt(7));
                 user.setPhone(resultSet.getString(8));
                 user.setMail(resultSet.getString(9));
+                user.setSum(resultSet.getDouble(10));
+                user.setMatchId(resultSet.getInt(11));
                 optionalUser = Optional.ofNullable(user); //принимает в себя null, но проверка раньше на это есть
             }
         } catch (SQLException e) {
@@ -117,7 +124,7 @@ public class UserDaoImpl implements UserDao {
                     connection.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace(); // todo
+                e.printStackTrace();
             }
         }
         return optionalUser;
@@ -156,7 +163,7 @@ public class UserDaoImpl implements UserDao {
                 if (connection != null)
                     connection.close();
             } catch (SQLException e) {
-                e.printStackTrace(); // todo
+                e.printStackTrace();
             }
         }
         return isAdd;
@@ -197,7 +204,7 @@ public class UserDaoImpl implements UserDao {
                     connection.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace(); // todo
+                e.printStackTrace();
             }
         }
         return isExist;
@@ -287,7 +294,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean deleteMatch(Long id) throws DaoException {
-        boolean isDeleted = false;
+        boolean isDeleted;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -395,17 +402,21 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException(e);
         } finally {
             try {
-                if (resultSet != null)
+                if (resultSet != null) {
                     resultSet.close();
-                if (preparedStatement != null)
+                }
+                if (preparedStatement != null) {
                     preparedStatement.close();
-                if (connection != null)
+                }
+                if (connection != null) {
                     connection.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
         return matches;
+
     }
 
     @Override
@@ -494,6 +505,123 @@ public class UserDaoImpl implements UserDao {
             }
         }
         return matches;
+    }
+
+    @Override
+    public boolean updateMatch(Match match) throws DaoException {
+        boolean isUpdate;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            preparedStatement = connection.prepareStatement(UPDATE_MATCH);
+            preparedStatement.setString(1, match.getName());
+            preparedStatement.setString(2, match.getPlayer1());
+            preparedStatement.setString(3, match.getPlayer2());
+            preparedStatement.setDouble(4, match.getRate1());
+            preparedStatement.setDouble(5, match.getRate0());
+            preparedStatement.setDouble(6, match.getRate2());
+            preparedStatement.setDate(7, Date.valueOf(match.getDate()));
+            preparedStatement.setLong(8, match.getSportId());
+
+            isUpdate = preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isUpdate;
+    }
+
+    @Override
+    public List<Player> method(String player) throws DaoException {
+        List<Player> players = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            preparedStatement = connection.prepareStatement(SEARCH_PLAYER_BY_NAME);
+            preparedStatement.setString(1, player);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Player playerEntity = new Player();
+                playerEntity.setPlayer(resultSet.getString(1));
+                playerEntity.setRate(resultSet.getDouble(2));
+                playerEntity.setDate(resultSet.getDate(3).toLocalDate());
+                playerEntity.setResultOfMatch(resultSet.getString(4));
+                players.add(playerEntity);
+            }
+
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return players;
+    }
+
+    @Override
+    public boolean makeABet(User user) throws DaoException {
+        boolean isUpdate;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            preparedStatement = connection.prepareStatement(MAKE_A_BET);
+
+            preparedStatement.setDouble(1, user.getSum());
+            preparedStatement.setInt(2, user.getMatchId());
+            preparedStatement.setLong(3, user.getId());
+
+            isUpdate = preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isUpdate;
     }
 }
 

@@ -26,7 +26,7 @@ public class DeleteMatchServlet extends HttpServlet {
         User user = (User) session.getAttribute("user");
         if (user.getRoleType().equals(RoleType.ADMIN)) {
             try {
-                Long matchId = Long.valueOf(matchIdString); // todo реши как делать через ваоидацию или так как есть
+                Long matchId = Long.valueOf(matchIdString);
                 userService.deleteMatch(matchId);
                 response.sendRedirect("pages/main.jsp");
             } catch (ServiceException | NumberFormatException e) {

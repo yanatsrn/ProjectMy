@@ -1,7 +1,6 @@
 package com.example.project.controller;
 
 import com.example.project.entity.Match;
-import com.example.project.entity.User;
 import com.example.project.exception.ServiceException;
 import com.example.project.service.UserService;
 import com.example.project.service.impl.UserServiceImpl;

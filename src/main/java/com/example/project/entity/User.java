@@ -12,6 +12,8 @@ public class User {
     private int age;
     private String phone;
     private String mail;
+    private Double sum;
+    private Integer matchId;
 
     public Long getId() {
         return id;
@@ -83,6 +85,22 @@ public class User {
 
     public void setMail(String mail) {
         this.mail = mail;
+    }
+
+    public Double getSum() {
+        return sum;
+    }
+
+    public void setSum(Double sum) {
+        this.sum = sum;
+    }
+
+    public Integer getMatchId() {
+        return matchId;
+    }
+
+    public void setMatchId(Integer matchId) {
+        this.matchId = matchId;
     }
 
     @Override

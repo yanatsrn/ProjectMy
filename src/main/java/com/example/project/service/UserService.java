@@ -1,6 +1,7 @@
 package com.example.project.service;
 
 import com.example.project.entity.Match;
+import com.example.project.entity.Player;
 import com.example.project.entity.User;
 import com.example.project.exception.DaoException;
 import com.example.project.exception.ServiceException;
@@ -20,4 +21,7 @@ public interface UserService {
     List<Match> searchMatchByName(String name) throws ServiceException;
     List<Match> sortMatchByName() throws ServiceException;
     List<Match> sortMatchByDate() throws ServiceException;
+    boolean updateMatch(Match match) throws ServiceException;
+    double method(String player) throws ServiceException;
+    boolean makeABet(User user) throws ServiceException;
 }

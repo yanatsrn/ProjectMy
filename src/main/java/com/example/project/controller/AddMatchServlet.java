@@ -22,6 +22,12 @@ public class AddMatchServlet extends HttpServlet{
     private UserService userService = new UserServiceImpl();
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("pages/addMatch.jsp");
+        requestDispatcher.forward(request, response);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
@@ -61,16 +67,18 @@ public class AddMatchServlet extends HttpServlet{
                     match.setRate2(Double.parseDouble(rate2));
                     match.setDate(LocalDate.parse(date));
                     userService.createMatch(match);
-                    response.sendRedirect("menuAdmin");//todo success
+                    response.sendRedirect("pages/main.jsp");
                 } else {
-                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("pages/menuAdmin.jsp");//todo ошибками
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("pages/addMatch.jsp");
                     requestDispatcher.forward(request, response);
                 }
             } catch (ServiceException e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         } else {
-            // todo  нет прав
+            request.setAttribute("errorRole", "Нет прав");
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("pages/addMatch.jsp");
+            requestDispatcher.forward(request, response);
         }
     }
 }
