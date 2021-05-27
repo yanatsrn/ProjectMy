@@ -1,10 +1,11 @@
 package com.example.project.controller;
 
+import com.example.project.entity.Match;
 import com.example.project.entity.User;
-import com.example.project.exception.ServiceException;
 import com.example.project.service.UserService;
 import com.example.project.service.impl.UserServiceImpl;
-import com.example.project.util.Report;
+import com.example.project.util.ReportMatches;
+import com.example.project.util.ReportUsers;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -21,8 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-@WebServlet(value = "/send_report")
-public class ReportServlet extends HttpServlet {
+@WebServlet(value = "/send_report_matches")
+public class ReportMatchesServlet extends HttpServlet {
     private UserService userService = new UserServiceImpl();
 
     @Override
@@ -32,14 +33,14 @@ public class ReportServlet extends HttpServlet {
             DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
             String currentDateTime = dateFormatter.format(new Date());
             String headerKey = "Content-Disposition";
-            String headerValue = "attachment; filename=stuff_" + currentDateTime + ".xlsx";
+            String headerValue = "attachment; filename=matches_" + currentDateTime + ".xlsx";
             response.setHeader(headerKey, headerValue);
-            List<User> allUser = userService.findAllUser();
+            List<Match> allMatches = userService.showAllMatches();
             XSSFWorkbook workbook = new XSSFWorkbook();
-            XSSFSheet sheet = workbook.createSheet("Users");
-            Report.writeHeaderLine(sheet);
+            XSSFSheet sheet = workbook.createSheet("Matches");
+            ReportMatches.writeHeaderLine(sheet);
 
-            Report.writeDataLines(allUser, workbook, sheet);
+            ReportMatches.writeDataLines(allMatches, workbook, sheet);
 
             ServletOutputStream outputStream = response.getOutputStream();
             workbook.write(outputStream);
@@ -53,5 +54,5 @@ public class ReportServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
-}
 
+}

@@ -36,18 +36,23 @@
     <h2>${errorDeleteMatch}</h2>
 </div>
 <c:if test="${user.getRoleType().toString() eq 'USER'}">
+    <form action="${pageContext.request.contextPath}/diagram" method="get">
+        <input type="submit" value="Сделать круговую диаграмму">
+    </form>
+</c:if>
+<c:if test="${user.getRoleType().toString() eq 'ADMIN'}">
+    <form action="${pageContext.request.contextPath}/send_report" method="get">
+        <input type="submit" value="Сделать отчет по пользователям">
+    </form>
+</c:if>
+<c:if test="${user.getRoleType().toString() eq 'USER'}">
     <form action="${pageContext.request.contextPath}/graphics" method="get">
         <input type="submit" value="Сделать график">
     </form>
 </c:if>
 <c:if test="${user.getRoleType().toString() eq 'USER'}">
-    <form action="${pageContext.request.contextPath}/diagram" method="get">
-        <input type="submit" value="Сделать круговую диаграмму">
-    </form>
-</c:if>
-<c:if test="${user.getRoleType().toString() eq 'USER'}">
-    <form action="${pageContext.request.contextPath}/send_report" method="get">
-        <input type="submit" value="Сделать отчет">
+    <form action="${pageContext.request.contextPath}/send_report_matches" method="get">
+        <input type="submit" value="Сделать отчет по матчам">
     </form>
 </c:if>
 
@@ -166,6 +171,9 @@
 
 <div class="alert alert-danger" role="alert">
     <h2>${errorRole}</h2>
+</div>
+<div class="alert alert-danger" role="alert">
+    <h2>${errorMatchNotFound}</h2>
 </div>
 </body>
 </head>

@@ -21,7 +21,7 @@ public class MethodServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String matchIdString = request.getParameter("match_id");
-        String player = request.getParameter("player"); // todo valid
+        String player = request.getParameter("player"); // todo valid данные приходящие из jsp
         try {
             Long matchId = Long.valueOf(matchIdString);
             Optional<Match> optionalMatch = userService.searchMatchById(matchId);

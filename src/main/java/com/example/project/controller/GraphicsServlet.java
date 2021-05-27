@@ -1,6 +1,5 @@
 package com.example.project.controller;
 
-import com.example.project.entity.Match;
 import com.example.project.entity.RoleType;
 import com.example.project.entity.User;
 import com.example.project.service.UserService;
@@ -14,13 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-@WebServlet(value = "/diagram")
-public class PieDiagramServlet extends HttpServlet {
+@WebServlet(value = "/graphics")
+public class GraphicsServlet extends HttpServlet {
     private UserService userService = new UserServiceImpl();
 
     @Override
@@ -29,22 +24,12 @@ public class PieDiagramServlet extends HttpServlet {
         User user = (User) session.getAttribute("user");
         if (user.getRoleType().equals(RoleType.USER)) {
             try {
-                List<Match> matches = userService.showAllMatches();
-                List<String> matchesName = new ArrayList<>();
-                Map<String, Integer> map = new HashMap<>();
-                for (Match match : matches) {
-                    matchesName.add(match.getName());
-                }
-                for (String match : matchesName) {
-                    map.merge(match, 1, Integer::sum);
-                }
-                request.setAttribute("statisticValues", map);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("pages/diagram.jsp");
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("pages/graphics.jsp");
                 requestDispatcher.forward(request, response);
             } catch (Exception e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
-        }  else {
+        } else {
             request.setAttribute("errorRole", "Нет прав");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("pages/main.jsp");
             requestDispatcher.forward(request, response);

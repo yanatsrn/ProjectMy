@@ -5,7 +5,7 @@
 <html >
 <head>
     <meta charset="UTF-8">
-    <title>Sign in form</title>
+    <title>Method</title>
     <link rel="stylesheet" href="css/styleSignInAndSignUp.css">
 </head>
 <html>

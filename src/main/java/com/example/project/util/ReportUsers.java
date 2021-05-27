@@ -9,9 +9,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.sql.SQLException;
 import java.util.List;
 
-public class Report {
+public class ReportUsers {
 
-    private Report() {
+    private ReportUsers() {
     }
 
     public static void writeHeaderLine(XSSFSheet sheet) {

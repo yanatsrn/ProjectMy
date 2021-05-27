@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="${pageContext.request.contextPath}/static/styles/general-styles.css" rel="stylesheet" type="text/css">
-    <title>Betting office</title>
+    <title>PieDiagram matches</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js">
     </script>
     <script type="text/javascript">
@@ -22,7 +22,7 @@
         function drawChart() {
             /*data.addRows([
 
-            <c:forEach items="${statisticTeamValues}" var="entry">
+            <c:forEach items="${statisticValues}" var="entry">
                         [ '
             ${entry.key}',
             ${entry.value} ],
@@ -31,14 +31,14 @@
                     ]);*/
             var data = google.visualization.arrayToDataTable([
                 ['Country', 'Area(square km)'],
-                <c:forEach items="${statisticTeamValues}" var="entry">
+                <c:forEach items="${statisticValues}" var="entry">
                 ['${entry.key}', ${entry.value}],
                 </c:forEach>
             ]);
 
             // Set chart options
             var options = {
-                'title': 'Оценки риска команд с наибольшим количеством сыгранных матчей', //title which will be shown right above the Google Pie Chart
+                'title': 'Соотношение предстоящих матчей по количеству записей', //title which will be shown right above the Google Pie Chart
                 is3D: false, //render Google Pie Chart as 3D
                 pieSliceText: 'label',
                 tooltip: {showColorCode: true},

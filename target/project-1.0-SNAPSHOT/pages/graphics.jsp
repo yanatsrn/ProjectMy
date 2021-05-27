@@ -2,6 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <title>Graphics</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
         google.charts.load('current', {'packages':['corechart']});
@@ -9,7 +10,7 @@
 
         function drawChart() {
             var data = google.visualization.arrayToDataTable([
-                ['Дата', 'Коэффициент игрока'],
+                ['Дата', 'Коэффициент клуба Арсенал'],
                 ['21-02-19',  3.7],
                 ['21-02-27',  11],
                 ['21-03-21',  8],
@@ -18,7 +19,7 @@
             ]);
 
             var options = {
-                title: 'График изменения коэффициента',
+                title: 'График изменения коэффициента клуба Арсенал',
                 curveType: 'function',
                 legend: { position: 'right' }
             };
